@@ -1,0 +1,1621 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>MBTI性格测试（完整版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: "微软雅黑", sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .test-section:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .question {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+        .question:hover {
+            border-color: #ddd;
+            background-color: #f5f5f5;
+        }
+        .options {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button.selected {
+            background-color: #2ecc71;
+        }
+        .result-btn {
+            margin-top: 20px;
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #2ecc71;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 600;
+        }
+        .result-btn:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .result-btn:active {
+            transform: translateY(0);
+        }
+        .result-area {
+            margin-top: 30px;
+            padding: 20px;
+            background: #ecf0f1;
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        .result-area h3 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .result-area p {
+            font-size: 18px;
+            line-height: 1.8;
+        }
+        .section-nav {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            background-color: #95a5a6;
+            padding: 8px 15px;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-btn.active {
+            background-color: #3498db;
+            font-weight: 600;
+        }
+        .nav-btn:hover:not(.active) {
+            background-color: #7f8c8d;
+        }
+        .progress-container {
+            margin: 20px 0;
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            height: 10px;
+            width: 100%;
+        }
+        .progress-bar {
+            height: 100%;
+            border-radius: 20px;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+        .question-number {
+            font-weight: bold;
+            color: #3498db;
+            margin-right: 5px;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+                font-size: 16px;
+            }
+            
+            h1 {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+            
+            h2 {
+                font-size: 18px;
+                padding-bottom: 8px;
+            }
+            
+            .test-section {
+                padding: 15px;
+                margin: 15px 0;
+            }
+            
+            .question {
+                margin: 12px 0;
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            .options {
+                gap: 8px;
+                flex-direction: column;
+            }
+            
+            button {
+                padding: 12px 15px;
+                font-size: 16px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .nav-btn {
+                padding: 10px;
+                font-size: 14px;
+                flex: 1;
+                text-align: center;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .result-btn {
+                padding: 15px 20px;
+                font-size: 18px;
+                width: 100%;
+            }
+            
+            .result-area {
+                padding: 15px;
+                margin-top: 20px;
+            }
+            
+            .result-area h3 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .result-area p {
+                font-size: 16px;
+            }
+            
+            .dimension-card {
+                padding: 10px;
+            }
+            
+            .dimension-scores {
+                gap: 10px;
+            }
+            
+            #resultDetails {
+                padding: 15px;
+            }
+            
+            #resultDetails h4 {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>MBTI性格测试（93题完整版）</h1>
+    <p>本测试分为四部分，需时约18分钟。请诚实、独立地回答，选择更符合你真实情况的选项。</p>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-text" id="progressText">已完成 0/93 题 (0%)</div>
+
+    <!-- 章节导航 -->
+    <div class="section-nav">
+        <button class="nav-btn active" onclick="showSection('section1', event)">第一部分（26题）</button>
+        <button class="nav-btn" onclick="showSection('section2', event)">第二部分（27题）</button>
+        <button class="nav-btn" onclick="showSection('section3', event)">第三部分（20题）</button>
+        <button class="nav-btn" onclick="showSection('section4', event)">第四部分（20题）</button>
+    </div>
+
+    <!-- 第一部分：MBTI测试题目 -->
+    <div class="test-section" id="section1">
+        <h2>第一部分（共26题）</h2>
+        <p>请选择你更愿意接受或喜欢的选项：</p>
+
+        <div class="question">1. a.敏感细腻；b.公正合理
+            <div class="options">
+                <button onclick="recordAnswer(1, 'a')">倾向a</button>
+                <button onclick="recordAnswer(1, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(1, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(1, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">2. a.以理服人；b.以情动人
+            <div class="options">
+                <button onclick="recordAnswer(2, 'a')">倾向a</button>
+                <button onclick="recordAnswer(2, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(2, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(2, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">3. a.阐述事实；b.表达思想
+            <div class="options">
+                <button onclick="recordAnswer(3, 'a')">倾向a</button>
+                <button onclick="recordAnswer(3, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(3, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(3, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">4. a.不受拘束的；b.有计划的
+            <div class="options">
+                <button onclick="recordAnswer(4, 'a')">倾向a</button>
+                <button onclick="recordAnswer(4, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(4, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(4, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">5. a.沉默的；b.健谈的
+            <div class="options">
+                <button onclick="recordAnswer(5, 'a')">倾向a</button>
+                <button onclick="recordAnswer(5, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(5, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(5, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">6. a.井井有条；b.随意安排
+            <div class="options">
+                <button onclick="recordAnswer(6, 'a')">倾向a</button>
+                <button onclick="recordAnswer(6, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(6, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(6, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">7. a.理想；b.现状
+            <div class="options">
+                <button onclick="recordAnswer(7, 'a')">倾向a</button>
+                <button onclick="recordAnswer(7, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(7, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(7, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">8. a.善解人意；b.深谋远虑
+            <div class="options">
+                <button onclick="recordAnswer(8, 'a')">倾向a</button>
+                <button onclick="recordAnswer(8, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(8, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(8, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">9. a.注重利益；b.注重情感
+            <div class="options">
+                <button onclick="recordAnswer(9, 'a')">倾向a</button>
+                <button onclick="recordAnswer(9, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(9, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(9, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">10. a.安静；b.活跃
+            <div class="options">
+                <button onclick="recordAnswer(10, 'a')">倾向a</button>
+                <button onclick="recordAnswer(10, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(10, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(10, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">11. a.经验；b.理论
+            <div class="options">
+                <button onclick="recordAnswer(11, 'a')">倾向a</button>
+                <button onclick="recordAnswer(11, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(11, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(11, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">12. a.敏感细腻；b.公正合理
+            <div class="options">
+                <button onclick="recordAnswer(12, 'a')">倾向a</button>
+                <button onclick="recordAnswer(12, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(12, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(12, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">13. a.以理服人；b.以情动人
+            <div class="options">
+                <button onclick="recordAnswer(13, 'a')">倾向a</button>
+                <button onclick="recordAnswer(13, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(13, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(13, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">14. a.阐述事实；b.表达思想
+            <div class="options">
+                <button onclick="recordAnswer(14, 'a')">倾向a</button>
+                <button onclick="recordAnswer(14, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(14, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(14, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">15. a.不受拘束的；b.有计划的
+            <div class="options">
+                <button onclick="recordAnswer(15, 'a')">倾向a</button>
+                <button onclick="recordAnswer(15, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(15, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(15, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">16. a.沉默的；b.健谈的
+            <div class="options">
+                <button onclick="recordAnswer(16, 'a')">倾向a</button>
+                <button onclick="recordAnswer(16, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(16, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(16, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">17. a.井井有条；b.随意安排
+            <div class="options">
+                <button onclick="recordAnswer(17, 'a')">倾向a</button>
+                <button onclick="recordAnswer(17, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(17, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(17, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">18. a.理想；b.现状
+            <div class="options">
+                <button onclick="recordAnswer(18, 'a')">倾向a</button>
+                <button onclick="recordAnswer(18, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(18, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(18, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">19. a.善解人意；b.深谋远虑
+            <div class="options">
+                <button onclick="recordAnswer(19, 'a')">倾向a</button>
+                <button onclick="recordAnswer(19, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(19, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(19, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">20. a.注重利益；b.注重情感
+            <div class="options">
+                <button onclick="recordAnswer(20, 'a')">倾向a</button>
+                <button onclick="recordAnswer(20, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(20, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(20, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">21. a.内向；b.外向
+            <div class="options">
+                <button onclick="recordAnswer(21, 'a')">倾向a</button>
+                <button onclick="recordAnswer(21, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(21, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(21, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">22. a.具体；b.抽象
+            <div class="options">
+                <button onclick="recordAnswer(22, 'a')">倾向a</button>
+                <button onclick="recordAnswer(22, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(22, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(22, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">23. a.思考；b.情感
+            <div class="options">
+                <button onclick="recordAnswer(23, 'a')">倾向a</button>
+                <button onclick="recordAnswer(23, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(23, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(23, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">24. a.判断；b.知觉
+            <div class="options">
+                <button onclick="recordAnswer(24, 'a')">倾向a</button>
+                <button onclick="recordAnswer(24, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(24, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(24, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">25. a.实际；b.创新
+            <div class="options">
+                <button onclick="recordAnswer(25, 'a')">倾向a</button>
+                <button onclick="recordAnswer(25, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(25, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(25, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">26. a.分析；b.综合
+            <div class="options">
+                <button onclick="recordAnswer(26, 'a')">倾向a</button>
+                <button onclick="recordAnswer(26, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(26, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(26, 'b')">倾向b</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二部分：MBTI测试题目 -->
+    <div class="test-section" id="section2" style="display: none;">
+        <h2>第二部分（共27题）</h2>
+        <p>请选择你更愿意接受或喜欢的选项：</p>
+
+        <div class="question">27. a.敏感细腻；b.公正合理
+            <div class="options">
+                <button onclick="recordAnswer(27, 'a')">倾向a</button>
+                <button onclick="recordAnswer(27, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(27, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(27, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">28. a.以理服人；b.以情动人
+            <div class="options">
+                <button onclick="recordAnswer(28, 'a')">倾向a</button>
+                <button onclick="recordAnswer(28, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(28, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(28, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">29. a.阐述事实；b.表达思想
+            <div class="options">
+                <button onclick="recordAnswer(29, 'a')">倾向a</button>
+                <button onclick="recordAnswer(29, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(29, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(29, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">30. a.不受拘束的；b.有计划的
+            <div class="options">
+                <button onclick="recordAnswer(30, 'a')">倾向a</button>
+                <button onclick="recordAnswer(30, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(30, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(30, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">31. a.沉默的；b.健谈的
+            <div class="options">
+                <button onclick="recordAnswer(31, 'a')">倾向a</button>
+                <button onclick="recordAnswer(31, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(31, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(31, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">32. a.井井有条；b.随意安排
+            <div class="options">
+                <button onclick="recordAnswer(32, 'a')">倾向a</button>
+                <button onclick="recordAnswer(32, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(32, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(32, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">33. a.理想；b.现状
+            <div class="options">
+                <button onclick="recordAnswer(33, 'a')">倾向a</button>
+                <button onclick="recordAnswer(33, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(33, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(33, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">34. a.善解人意；b.深谋远虑
+            <div class="options">
+                <button onclick="recordAnswer(34, 'a')">倾向a</button>
+                <button onclick="recordAnswer(34, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(34, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(34, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">35. a.注重利益；b.注重情感
+            <div class="options">
+                <button onclick="recordAnswer(35, 'a')">倾向a</button>
+                <button onclick="recordAnswer(35, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(35, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(35, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">36. a.安静；b.活跃
+            <div class="options">
+                <button onclick="recordAnswer(36, 'a')">倾向a</button>
+                <button onclick="recordAnswer(36, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(36, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(36, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">37. a.经验；b.理论
+            <div class="options">
+                <button onclick="recordAnswer(37, 'a')">倾向a</button>
+                <button onclick="recordAnswer(37, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(37, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(37, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">38. a.敏感细腻；b.公正合理
+            <div class="options">
+                <button onclick="recordAnswer(38, 'a')">倾向a</button>
+                <button onclick="recordAnswer(38, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(38, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(38, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">39. a.以理服人；b.以情动人
+            <div class="options">
+                <button onclick="recordAnswer(39, 'a')">倾向a</button>
+                <button onclick="recordAnswer(39, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(39, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(39, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">40. a.阐述事实；b.表达思想
+            <div class="options">
+                <button onclick="recordAnswer(40, 'a')">倾向a</button>
+                <button onclick="recordAnswer(40, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(40, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(40, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">41. a.不受拘束的；b.有计划的
+            <div class="options">
+                <button onclick="recordAnswer(41, 'a')">倾向a</button>
+                <button onclick="recordAnswer(41, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(41, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(41, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">42. a.沉默的；b.健谈的
+            <div class="options">
+                <button onclick="recordAnswer(42, 'a')">倾向a</button>
+                <button onclick="recordAnswer(42, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(42, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(42, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">43. a.井井有条；b.随意安排
+            <div class="options">
+                <button onclick="recordAnswer(43, 'a')">倾向a</button>
+                <button onclick="recordAnswer(43, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(43, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(43, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">44. a.理想；b.现状
+            <div class="options">
+                <button onclick="recordAnswer(44, 'a')">倾向a</button>
+                <button onclick="recordAnswer(44, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(44, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(44, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">45. a.善解人意；b.深谋远虑
+            <div class="options">
+                <button onclick="recordAnswer(45, 'a')">倾向a</button>
+                <button onclick="recordAnswer(45, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(45, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(45, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">46. a.注重利益；b.注重情感
+            <div class="options">
+                <button onclick="recordAnswer(46, 'a')">倾向a</button>
+                <button onclick="recordAnswer(46, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(46, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(46, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">47. a.安静；b.活跃
+            <div class="options">
+                <button onclick="recordAnswer(47, 'a')">倾向a</button>
+                <button onclick="recordAnswer(47, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(47, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(47, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">48. a.经验；b.理论
+            <div class="options">
+                <button onclick="recordAnswer(48, 'a')">倾向a</button>
+                <button onclick="recordAnswer(48, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(48, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(48, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">49. a.敏感细腻；b.公正合理
+            <div class="options">
+                <button onclick="recordAnswer(49, 'a')">倾向a</button>
+                <button onclick="recordAnswer(49, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(49, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(49, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">50. a.以理服人；b.以情动人
+            <div class="options">
+                <button onclick="recordAnswer(50, 'a')">倾向a</button>
+                <button onclick="recordAnswer(50, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(50, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(50, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">51. a.阐述事实；b.表达思想
+            <div class="options">
+                <button onclick="recordAnswer(51, 'a')">倾向a</button>
+                <button onclick="recordAnswer(51, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(51, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(51, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">52. a.不受拘束的；b.有计划的
+            <div class="options">
+                <button onclick="recordAnswer(52, 'a')">倾向a</button>
+                <button onclick="recordAnswer(52, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(52, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(52, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">53. a.沉默的；b.健谈的
+            <div class="options">
+                <button onclick="recordAnswer(53, 'a')">倾向a</button>
+                <button onclick="recordAnswer(53, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(53, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(53, 'b')">倾向b</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三部分：MBTI测试题目 -->
+    <div class="test-section" id="section3" style="display: none;">
+        <h2>第三部分（共20题）</h2>
+        <p>请选择你更愿意接受或喜欢的选项：</p>
+
+        <div class="question">54. a.井井有条；b.随意安排
+            <div class="options">
+                <button onclick="recordAnswer(54, 'a')">倾向a</button>
+                <button onclick="recordAnswer(54, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(54, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(54, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">55. a.理想；b.现状
+            <div class="options">
+                <button onclick="recordAnswer(55, 'a')">倾向a</button>
+                <button onclick="recordAnswer(55, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(55, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(55, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">56. a.善解人意；b.深谋远虑
+            <div class="options">
+                <button onclick="recordAnswer(56, 'a')">倾向a</button>
+                <button onclick="recordAnswer(56, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(56, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(56, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">57. a.注重利益；b.注重情感
+            <div class="options">
+                <button onclick="recordAnswer(57, 'a')">倾向a</button>
+                <button onclick="recordAnswer(57, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(57, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(57, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">58. a.安静；b.活跃
+            <div class="options">
+                <button onclick="recordAnswer(58, 'a')">倾向a</button>
+                <button onclick="recordAnswer(58, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(58, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(58, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">59. a.经验；b.理论
+            <div class="options">
+                <button onclick="recordAnswer(59, 'a')">倾向a</button>
+                <button onclick="recordAnswer(59, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(59, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(59, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">60. a.敏感细腻；b.公正合理
+            <div class="options">
+                <button onclick="recordAnswer(60, 'a')">倾向a</button>
+                <button onclick="recordAnswer(60, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(60, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(60, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">61. a.以理服人；b.以情动人
+            <div class="options">
+                <button onclick="recordAnswer(61, 'a')">倾向a</button>
+                <button onclick="recordAnswer(61, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(61, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(61, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">62. a.阐述事实；b.表达思想
+            <div class="options">
+                <button onclick="recordAnswer(62, 'a')">倾向a</button>
+                <button onclick="recordAnswer(62, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(62, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(62, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">63. a.不受拘束的；b.有计划的
+            <div class="options">
+                <button onclick="recordAnswer(63, 'a')">倾向a</button>
+                <button onclick="recordAnswer(63, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(63, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(63, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">64. a.沉默的；b.健谈的
+            <div class="options">
+                <button onclick="recordAnswer(64, 'a')">倾向a</button>
+                <button onclick="recordAnswer(64, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(64, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(64, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">65. a.井井有条；b.随意安排
+            <div class="options">
+                <button onclick="recordAnswer(65, 'a')">倾向a</button>
+                <button onclick="recordAnswer(65, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(65, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(65, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">66. a.理想；b.现状
+            <div class="options">
+                <button onclick="recordAnswer(66, 'a')">倾向a</button>
+                <button onclick="recordAnswer(66, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(66, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(66, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">67. a.善解人意；b.深谋远虑
+            <div class="options">
+                <button onclick="recordAnswer(67, 'a')">倾向a</button>
+                <button onclick="recordAnswer(67, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(67, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(67, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">68. a.注重利益；b.注重情感
+            <div class="options">
+                <button onclick="recordAnswer(68, 'a')">倾向a</button>
+                <button onclick="recordAnswer(68, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(68, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(68, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">69. a.安静；b.活跃
+            <div class="options">
+                <button onclick="recordAnswer(69, 'a')">倾向a</button>
+                <button onclick="recordAnswer(69, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(69, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(69, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">70. a.经验；b.理论
+            <div class="options">
+                <button onclick="recordAnswer(70, 'a')">倾向a</button>
+                <button onclick="recordAnswer(70, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(70, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(70, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">71. a.敏感细腻；b.公正合理
+            <div class="options">
+                <button onclick="recordAnswer(71, 'a')">倾向a</button>
+                <button onclick="recordAnswer(71, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(71, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(71, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">72. a.以理服人；b.以情动人
+            <div class="options">
+                <button onclick="recordAnswer(72, 'a')">倾向a</button>
+                <button onclick="recordAnswer(72, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(72, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(72, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">73. a.阐述事实；b.表达思想
+            <div class="options">
+                <button onclick="recordAnswer(73, 'a')">倾向a</button>
+                <button onclick="recordAnswer(73, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(73, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(73, 'b')">倾向b</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第四部分：MBTI测试题目 -->
+    <div class="test-section" id="section4" style="display: none;">
+        <h2>第四部分（共20题）</h2>
+        <p>请选择你更愿意接受或喜欢的选项：</p>
+
+        <div class="question">74. a.不受拘束的；b.有计划的
+            <div class="options">
+                <button onclick="recordAnswer(74, 'a')">倾向a</button>
+                <button onclick="recordAnswer(74, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(74, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(74, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">75. a.沉默的；b.健谈的
+            <div class="options">
+                <button onclick="recordAnswer(75, 'a')">倾向a</button>
+                <button onclick="recordAnswer(75, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(75, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(75, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">76. a.井井有条；b.随意安排
+            <div class="options">
+                <button onclick="recordAnswer(76, 'a')">倾向a</button>
+                <button onclick="recordAnswer(76, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(76, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(76, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">77. a.理想；b.现状
+            <div class="options">
+                <button onclick="recordAnswer(77, 'a')">倾向a</button>
+                <button onclick="recordAnswer(77, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(77, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(77, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">78. a.善解人意；b.深谋远虑
+            <div class="options">
+                <button onclick="recordAnswer(78, 'a')">倾向a</button>
+                <button onclick="recordAnswer(78, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(78, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(78, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">79. a.注重利益；b.注重情感
+            <div class="options">
+                <button onclick="recordAnswer(79, 'a')">倾向a</button>
+                <button onclick="recordAnswer(79, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(79, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(79, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">80. a.安静；b.活跃
+            <div class="options">
+                <button onclick="recordAnswer(80, 'a')">倾向a</button>
+                <button onclick="recordAnswer(80, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(80, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(80, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">81. a.经验；b.理论
+            <div class="options">
+                <button onclick="recordAnswer(81, 'a')">倾向a</button>
+                <button onclick="recordAnswer(81, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(81, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(81, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">82. a.敏感细腻；b.公正合理
+            <div class="options">
+                <button onclick="recordAnswer(82, 'a')">倾向a</button>
+                <button onclick="recordAnswer(82, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(82, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(82, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">83. a.以理服人；b.以情动人
+            <div class="options">
+                <button onclick="recordAnswer(83, 'a')">倾向a</button>
+                <button onclick="recordAnswer(83, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(83, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(83, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">84. a.阐述事实；b.表达思想
+            <div class="options">
+                <button onclick="recordAnswer(84, 'a')">倾向a</button>
+                <button onclick="recordAnswer(84, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(84, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(84, 'b')">倾向b</button>
+            </div>
+        </div>
+
+        <div class="question">85. a.不受拘束的；b.有计划的
+            <div class="options">
+                <button onclick="recordAnswer(85, 'a')">倾向a</button>
+                <button onclick="recordAnswer(85, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(85, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(85, 'b')">倾向b</button>
+            </div>
+        </div>
+        <div class="question">86. a.沉默的；b.健谈的
+            <div class="options">
+                <button onclick="recordAnswer(86, 'a')">倾向a</button>
+                <button onclick="recordAnswer(86, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(86, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(86, 'b')">倾向b</button>
+            </div>
+        </div>
+        <div class="question">87. a.井井有条；b.随意安排
+            <div class="options">
+                <button onclick="recordAnswer(87, 'a')">倾向a</button>
+                <button onclick="recordAnswer(87, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(87, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(87, 'b')">倾向b</button>
+            </div>
+        </div>
+        <div class="question">88. a.理想；b.现状
+            <div class="options">
+                <button onclick="recordAnswer(88, 'a')">倾向a</button>
+                <button onclick="recordAnswer(88, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(88, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(88, 'b')">倾向b</button>
+            </div>
+        </div>
+        <div class="question">89. a.善解人意；b.深谋远虑
+            <div class="options">
+                <button onclick="recordAnswer(89, 'a')">倾向a</button>
+                <button onclick="recordAnswer(89, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(89, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(89, 'b')">倾向b</button>
+            </div>
+        </div>
+        <div class="question">90. a.注重利益；b.注重情感
+            <div class="options">
+                <button onclick="recordAnswer(90, 'a')">倾向a</button>
+                <button onclick="recordAnswer(90, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(90, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(90, 'b')">倾向b</button>
+            </div>
+        </div>
+        <div class="question">91. a.安静；b.活跃
+            <div class="options">
+                <button onclick="recordAnswer(91, 'a')">倾向a</button>
+                <button onclick="recordAnswer(91, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(91, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(91, 'b')">倾向b</button>
+            </div>
+        </div>
+        <div class="question">92. a.经验；b.理论
+            <div class="options">
+                <button onclick="recordAnswer(92, 'a')">倾向a</button>
+                <button onclick="recordAnswer(92, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(92, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(92, 'b')">倾向b</button>
+            </div>
+        </div>
+        <div class="question">93. a.敏感细腻；b.公正合理
+            <div class="options">
+                <button onclick="recordAnswer(93, 'a')">倾向a</button>
+                <button onclick="recordAnswer(93, 'a-light')">较倾向a</button>
+                <button onclick="recordAnswer(93, 'b-light')">较倾向b</button>
+                <button onclick="recordAnswer(93, 'b')">倾向b</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="result-btn" onclick="calculateResult()">查看我的MBTI结果</button>
+
+    <div class="result-area" id="resultArea">
+        <h3>你的MBTI性格类型：</h3>
+        <div id="resultType" class="text-2xl font-bold mb-4">（完成测试后显示）</div>
+        <div id="resultDescription" class="mb-6 text-lg"></div>
+        
+        <h4 class="text-xl font-semibold mb-3">各维度得分情况：</h4>
+        <div class="dimension-scores grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div class="dimension-card p-4 bg-white rounded-lg shadow">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium">外向 (E)</span>
+                    <span id="scoreE" class="font-bold">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="barE" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="dimension-card p-4 bg-white rounded-lg shadow">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium">内向 (I)</span>
+                    <span id="scoreI" class="font-bold">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="barI" class="bg-green-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="dimension-card p-4 bg-white rounded-lg shadow">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium">感觉 (S)</span>
+                    <span id="scoreS" class="font-bold">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="barS" class="bg-yellow-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="dimension-card p-4 bg-white rounded-lg shadow">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium">直觉 (N)</span>
+                    <span id="scoreN" class="font-bold">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="barN" class="bg-purple-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="dimension-card p-4 bg-white rounded-lg shadow">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium">思考 (T)</span>
+                    <span id="scoreT" class="font-bold">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="barT" class="bg-red-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="dimension-card p-4 bg-white rounded-lg shadow">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium">情感 (F)</span>
+                    <span id="scoreF" class="font-bold">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="barF" class="bg-pink-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="dimension-card p-4 bg-white rounded-lg shadow">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium">判断 (J)</span>
+                    <span id="scoreJ" class="font-bold">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="barJ" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="dimension-card p-4 bg-white rounded-lg shadow">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium">知觉 (P)</span>
+                    <span id="scoreP" class="font-bold">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="barP" class="bg-teal-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="resultDetails" class="bg-white p-6 rounded-lg shadow">
+            <h4 class="text-xl font-semibold mb-3">性格特点详解：</h4>
+            <div id="detailedDescription"></div>
+        </div>
+    </div>
+
+    <script>
+        const answers = {};
+        function recordAnswer(questionNum, option) {
+            answers[questionNum] = option;
+            
+            // 更新选项选中状态
+            // 找到包含特定问题编号的元素
+            const questionElement = Array.from(document.querySelectorAll('.question')).find(el => {
+                return el.textContent.trim().startsWith(`${questionNum}.`);
+            });
+            
+            if (questionElement) {
+                const buttons = questionElement.querySelectorAll('.options button');
+                buttons.forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                const selectedButton = Array.from(buttons).find(btn => {
+                    const onclick = btn.getAttribute('onclick');
+                    return onclick.includes(`recordAnswer(${questionNum}, '${option}')`);
+                });
+                if (selectedButton) {
+                    selectedButton.classList.add('selected');
+                }
+            }
+            
+            // 更新进度条
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const answeredCount = Object.keys(answers).length;
+            const totalCount = 93;
+            const progressPercentage = Math.round((answeredCount / totalCount) * 100);
+            
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            if (progressBar && progressText) {
+                progressBar.style.width = `${progressPercentage}%`;
+                progressText.textContent = `已完成 ${answeredCount}/${totalCount} 题 (${progressPercentage}%)`;
+                
+                // 根据进度改变颜色
+                if (progressPercentage < 33) {
+                    progressBar.style.backgroundColor = '#3498db';
+                } else if (progressPercentage < 66) {
+                    progressBar.style.backgroundColor = '#f39c12';
+                } else {
+                    progressBar.style.backgroundColor = '#2ecc71';
+                }
+            }
+        }
+        function showSection(sectionId, event) {
+            document.querySelectorAll('.test-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(sectionId).style.display = 'block';
+            event.target.classList.add('active');
+        }
+        function calculateResult() {
+            if (Object.keys(answers).length !== 93) {
+                alert('请完成所有93道题目后再查看结果！');
+                return;
+            }
+            
+            // 初始化各维度得分
+            let E=0,I=0,S=0,N=0,T=0,F=0,J=0,P=0;
+            
+            // 计分规则
+            // （一）判断vs知觉
+            // - 项目：1，4，12，14，20，28，36，41，64，76，86 选择A，判断（judge，J）得1分
+            // - 项目：8，17，24，55，59，78，80，84，88，90，93 选择B，判断（judge，J）得1分
+            const jQuestionsA = [1,4,12,14,20,28,36,41,64,76,86];
+            const jQuestionsB = [8,17,24,55,59,78,80,84,88,90,93];
+            
+            // （二）思维vs情感
+            // - 项目：31，33，35，43，45，47，49，56，58，61，66，75，87 选择A 思维（Thinking，T）得1分
+            // - 项目：6，15，21，29，37，40，51，53，70，72，89 选择B 思维（Thinking，T）得1分
+            const tQuestionsA = [31,33,35,43,45,47,49,56,58,61,66,75,87];
+            const tQuestionsB = [6,15,21,29,37,40,51,53,70,72,89];
+            
+            // （三）感觉vs直觉
+            // - 项目：2，9，25，30，34，39，50，52，54，60，63，73，92 选择A 感觉（Sensing，S）得1分
+            // - 项目：5，11，18，22，27，44，46，48，65，67，69，71，82 选择B 感觉（Sensing，S）得1分
+            const sQuestionsA = [2,9,25,30,34,39,50,52,54,60,63,73,92];
+            const sQuestionsB = [5,11,18,22,27,44,46,48,65,67,69,71,82];
+            
+            // （四）外倾vs内倾
+            // - 项目：3，7，10，19，23，32，62，74，79，81，83 选择A 外倾（extroversion，E）得1分
+            // - 项目：13，16，26，38，42，57，68，77，85，91 选择B 外倾（extroversion，E）得1分
+            const eQuestionsA = [3,7,10,19,23,32,62,74,79,81,83];
+            const eQuestionsB = [13,16,26,38,42,57,68,77,85,91];
+            
+            // 计算得分
+            for(let [q, opt] of Object.entries(answers)) {
+                const questionNum = parseInt(q);
+                
+                // 计算J/P维度
+                if (jQuestionsA.includes(questionNum) && (opt === 'a' || opt === 'a-light')) {
+                    J += opt === 'a' ? 2 : 1;
+                }
+                if (jQuestionsB.includes(questionNum) && (opt === 'b' || opt === 'b-light')) {
+                    J += opt === 'b' ? 2 : 1;
+                }
+                
+                // 计算T/F维度
+                if (tQuestionsA.includes(questionNum) && (opt === 'a' || opt === 'a-light')) {
+                    T += opt === 'a' ? 2 : 1;
+                }
+                if (tQuestionsB.includes(questionNum) && (opt === 'b' || opt === 'b-light')) {
+                    T += opt === 'b' ? 2 : 1;
+                }
+                
+                // 计算S/N维度
+                if (sQuestionsA.includes(questionNum) && (opt === 'a' || opt === 'a-light')) {
+                    S += opt === 'a' ? 2 : 1;
+                }
+                if (sQuestionsB.includes(questionNum) && (opt === 'b' || opt === 'b-light')) {
+                    S += opt === 'b' ? 2 : 1;
+                }
+                
+                // 计算E/I维度
+                if (eQuestionsA.includes(questionNum) && (opt === 'a' || opt === 'a-light')) {
+                    E += opt === 'a' ? 2 : 1;
+                }
+                if (eQuestionsB.includes(questionNum) && (opt === 'b' || opt === 'b-light')) {
+                    E += opt === 'b' ? 2 : 1;
+                }
+            }
+            
+            // 计算各维度对立得分
+            I = 22 - E; // E/I维度共11题，每题2分，总分22
+            N = 26 - S; // S/N维度共13题，每题2分，总分26
+            F = 24 - T; // T/F维度共12题，每题2分，总分24
+            P = 22 - J; // J/P维度共11题，每题2分，总分22
+            
+            // 计算各维度百分比
+            const percentE = Math.round((E / 22) * 100);
+            const percentI = 100 - percentE;
+            const percentS = Math.round((S / 26) * 100);
+            const percentN = 100 - percentS;
+            const percentT = Math.round((T / 24) * 100);
+            const percentF = 100 - percentT;
+            const percentJ = Math.round((J / 22) * 100);
+            const percentP = 100 - percentJ;
+            
+            // 确定类型
+            let type = (E>I?'E':'I')+(S>N?'S':'N')+(T>F?'T':'F')+(J>P?'J':'P');
+            
+            // 更新进度条为100%
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('progressBar').style.backgroundColor = '#2ecc71';
+            document.getElementById('progressText').textContent = `已完成 93/93 题 (100%)`;
+            
+            // 详细性格描述
+            const detailedDescriptions = {
+                ISTJ: {
+                    brief: "实际、负责，注重秩序和细节",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ISTJ型的人是严肃的、有责任心的和通情达理的社会坚定分子。他们值得信赖，他们重视承诺，对他们来说，言语就是庄严的宣誓。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> 他们工作缜密，讲求实际，很有头脑也很现实。他们具有很强的集中力、条理性和准确性。无论他们做什么，都相当有条理和可靠。他们具有坚定不移、深思熟虑的思想，一旦他们着手自己相信是最好的行动方法时，就很难转变或变得沮丧。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> ISTJ型的人特别安静和勤奋，对于细节有很强的记忆和判断。他们能够引证准确的事实支持自己的观点，把过去的经历运用到现在的决策中。他们重视和利用符合逻辑、客观的分析，以坚持不懈的态度准时地完成工作，并且总是安排有序，很有条理。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 工商业领域、政府机构、金融银行业、政府机构技术领域、医务领域</p>
+                        <p><strong>适合职业：</strong> 审计师、会计、财务经理、办公室行政管理、后勤和供应管理、中层经理、公务（法律、税务）执行人员等；银行信贷员、成本估价师、保险精算师、税务经纪人、税务检查员等；机械、电气工程师、计算机程序员、数据库管理员、地质、气象学家、法律研究者、律师等；外科医生、药剂师、实验室技术人员、牙科医生、医学研究员等。</p>
+                    `
+                },
+                ISFJ: {
+                    brief: "友善、细心，重视他人需求",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ISFJ型的人忠诚、有奉献精神和同情心，理解别人的感受。他们意志清醒而有责任心，乐于为人所需。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> 他们十分务实，他们喜欢平和谦逊的人。他们喜欢利用大量的事实情况，对于细节则有很强的记忆力。他们耐心地对待任务的整个阶段，喜欢事情能够清晰明确。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> 他们具有强烈的职业道德，所以他们如果知道自己的行为真正有用时，会对需要完成之事承担责任。他们准确系统地完成任务。他们具有传统的价值观，十分保守。他们利用符合实际的判断标准做决定，通过出色的注重实际的态度增加了稳定性。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 无明显领域特征、医护领域、消费类商业、服务业领域</p>
+                        <p><strong>适合职业：</strong> 行政管理人员、总经理助理、秘书、人事管理者、项目经理、物流经理、律师助手等；外科医生及其它各类医生、家庭医生、牙科医生、护士、药剂师、医学专家、营养学专家、顾问等；零售店、精品店店主、大型商场、酒店管理人员、室内设计师等。</p>
+                    `
+                },
+                INFJ: {
+                    brief: "富有洞察力，追求理想与意义",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> INFJ型的人生活在思想的世界里。他们是独立的、有独创性的思想家，具有强烈的感情、坚定的原则和正直的人性。即使面对怀疑，INFJ型的人仍相信自己的看法与决定。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> 他们对自己的评价高于其他的一切，包括流行观点和存在的权威，这种内在的观念激发着他们的积极性。通常INFJ型的人具有本能的洞察力，能够看到事物更深层的含义。即使他人无法分享他们的热情，但灵感对于他们重要而令人信服。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> INFJ型的人忠诚、坚定、富有理想。他们珍视正直，十分坚定以至达到倔强的地步。因为他们的说服能力，以及对于什么对公共利益最有利有清楚的看法，所以INFJ型的人会成为伟大的领导者。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 咨询、教育、科研等领域、文化、艺术、设计等领域</p>
+                        <p><strong>适合职业：</strong> 心理咨询工作者、心理诊疗师、职业指导顾问、大学教师（人文学科、艺术类）、心理学、教育学、社会学、哲学及其它领域的研究人员等；作家、诗人、剧作家、电影编剧、电影导演、画家、雕塑家、音乐家、艺术顾问、建筑师、设计师等。</p>
+                    `
+                },
+                INTJ: {
+                    brief: "理性、创新，擅长战略规划",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> INTJ型的人是完美主义者。他们强烈地要求个人自由和能力，同时在他们独创的思想中，不可动摇的信仰促使他们达到目标。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> 他们思维严谨、有逻辑性、足智多谋，他们能够看到新计划实行后的结果。他们对自己和别人都很苛求，往往几乎同样强硬地逼迫别人和自己。他们并不十分受冷漠与批评的干扰，作为所有性格类型中最独立的，INTJ型的人更喜欢以自己的方式行事。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> 面对相反意见，他们通常持怀疑态度，十分坚定和坚决。权威本身不能强制他们，只有他们认为这些规则对自己的更重要的目标有用时，才会去遵守。INTJ型的人是天生的谋略家，具有独特的思想、伟大的远见和梦想。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 科研、科技应用、技术咨询、管理咨询、金融、投资领域、创造性行业</p>
+                        <p><strong>适合职业：</strong> 各类科学家、研究所研究人员、设计工程师、系统分析员、计算机程序员、研究开发部经理等；各类技术顾问、技术专家、企业管理顾问、投资专家、法律顾问、医学专家、精神分析学家等；经济学家、投资银行研究员、证券投资和金融分析员、投资银行家、财务计划人、企业并购专家等；各类发明家、建筑师、社论作家、设计师、艺术家等。</p>
+                    `
+                },
+                ISTP: {
+                    brief: "灵活、务实，擅长动手解决问题",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ISTP型的人坦率、诚实、讲求实效，他们喜欢行动而非漫谈。他们很谦逊，对于完成工作的方法有很好的理解方。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> 他们擅长分析，所以他们对客观含蓄的原则很有兴趣。他们对于技巧性的事物有天生的理解力，通常精于使用工具和进行手工劳动。他们往往做出有条理而保密的决定。他们仅仅是按照自己所看到的、有条理而直接地陈述事实。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> ISTP型的人好奇心强，而且善于观察，只有理性、可靠的事实才能使他们信服。他们重视事实，简直就是有关他们知之甚深的知识的宝库。他们是现实主义者，所以能够很好地利用可获得的资源，同时他们擅于把握时机，这使他们变得很讲求实效。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 技术领域、证券、金融业、贸易、商业领域、户外、运动、艺术等领域</p>
+                        <p><strong>适合职业：</strong> 机械、电气、电子工程师、各类技术专家和技师、计算机硬件、系统集成专业人员等；证券分析师、金融、财务顾问、经济学研究者等；贸易商、商品经销商、产品代理商（有形产品为主）等；警察、侦探、体育工作者、赛车手、飞行员、雕塑家、手工制作、画家等。</p>
+                    `
+                },
+                ISFP: {
+                    brief: "温和、敏感，热爱生活与艺术",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ISFP型的人平和、敏感，他们保持着许多强烈的个人理想和自己的价值观念。他们更多地是通过行为而不是言辞表达自己深沉的情感。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> ISFP型的人谦虚而缄默，但实际上他们是具有巨大的友爱和热情之人，但是除了与他们相知和信赖的人在一起外，他们不经常表现出自我的另一面。因为ISFP型的人不喜欢直接地自我表达，所以常常被误解。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> ISFP型的人耐心、灵活，很容易与他人相处，很少支配或控制别人。他们很客观，以一种相当实事求是的方式接受他人的行为。他们善于观察周围的人和物，却不寻求发现动机和含义。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 手工艺、艺术领域、医护领域、商业、服务业领域</p>
+                        <p><strong>适合职业：</strong> 时装、首饰设计师、装潢、园艺设计师、陶器、乐器、卡通、漫画制作者、素描画家、舞蹈演员、画家等；出诊医生、出诊护士、理疗师、牙科医生、个人健康和运动教练等；餐饮业、娱乐业业主、旅行社销售人员、体育用品、个人理疗用品销售员等。</p>
+                    `
+                },
+                INFP: {
+                    brief: "理想主义，追求内心的和谐与真实",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> INFP型的人把内在的和谐视为高于其他一切。他们敏感、理想化、忠诚，对于个人价值具有一种强烈的荣誉感。他们个人信仰坚定，有为自认为有价值的事业献身的精神。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> INFP型的人对于已知事物之外的可能性很感兴趣，精力集中于他们的梦想和想象。他们思维开阔、有好奇心和洞察力，常常具有出色的长远眼光。在日常事务中，他们通常灵活多变、具有忍耐力和适应性，但是他们非常坚定地对待内心的忠诚，为自己设定了事实上几乎是不可能的标准。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> INFP型的人具有许多使他们忙碌的理想和忠诚。他们十分坚定地完成自己所选择的事情，他们往往承担得太多，但不管怎样总要完成每件事。虽然对外部世界他们显得冷淡缄默，但INFP型的人很关心内在。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 创作性、艺术类、教育、研究、咨询类</p>
+                        <p><strong>适合职业：</strong> 各类艺术家、插图画家、诗人、小说家、建筑师、设计师、文学编辑、艺术指导、记者等；大学老师（人文类）、心理学工作者、心理辅导和咨询人员、社科类研究人员、社会工作者、教育顾问、图书管理者、翻译家等。</p>
+                    `
+                },
+                INTP: {
+                    brief: "理性、好奇，热衷于探索理论",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> INTP型的人是解决理性问题者。他们很有才智和条理性，以及创造才华的突出表现。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> 他们外表平静、缄默、超然，内心却专心致志于分析问题。他们苛求精细、惯于怀疑。他们努力寻找和利用原则以理解许多想法。他们喜欢有条理和有目的的交谈，而且可能会仅仅为了高兴，争论一些无益而琐细的问题。只有有条理的推理才会使他们信服。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> 通常INTP型的人是足智多谋、有独立见解的思考者。他们重视才智，对于个人能力有强烈的欲望，有能力也很感兴趣向他人挑战。INTP型的人最主要的兴趣在于理解明显的事物之外的可能性。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 计算机技术、理论研究、学术领域、专业领域、创造性领域</p>
+                        <p><strong>适合职业：</strong> 软件设计师、系统分析师、计算机程序员、数据库管理、故障排除专家等；大学教授、科研机构研究人员、数学家、物理学家、经济学家、考古学家、历史学家等；证券分析师、金融投资顾问、律师、法律顾问、财务专家、侦探等；各类发明家、作家、设计师、音乐家、艺术家、艺术鉴赏家等。</p>
+                    `
+                },
+                ESTP: {
+                    brief: "外向、果断，擅长应对突发情况",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ESTP型的人不会焦虑，因为他们是快乐的。ESTP型的人活跃、随遇而安、天真率直。他们乐于享受现在的一切而不是为将来计划什么。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> ESTP型的人很现实，他们信任和依赖于自己对这个世界的感受。他们是好奇而热心的观察者。因为他们接受现在的一切，所以他们思维开阔，能够容忍自我和他人。ESTP型的人喜欢处理、分解与恢复原状的真实事物。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> ESTP型的人喜欢行动而不是漫谈，当问题出现时，他们乐于去处理。他们是优秀的解决问题的人，这是因为他们能够掌握必要的事实情况，然后找到符合逻辑的明智的解决途径，而无需浪费大量的努力或精力。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 贸易、商业、某些特殊领域、服务业、金融证券业、娱乐、体育、艺术领域</p>
+                        <p><strong>适合职业：</strong> 各类贸易商、批发商、中间商、零售商、房地产经纪人、保险经纪人、汽车销售人员、私家侦探、警察等；餐饮、娱乐及其他各类服务业的业主、主管、特许经营者、自由职业者等；股票经纪人、证券分析师、理财顾问、个人投资者等；娱乐节目主持人、体育节目评论、脱口秀、音乐、舞蹈表演者、健身教练、体育工作者等。</p>
+                    `
+                },
+                ESFP: {
+                    brief: "活泼、热情，享受当下的体验",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ESFP型的人乐意与人相处，有一种真正的生活热情。他们顽皮活泼，通过真诚和玩笑使别人感到事情更加有趣。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> ESFP型的人脾气随和、适应性强，热情友好和慷慨大方。他们擅长交际，常常是别人的"注意中心"。他们热情而乐于合作地参加各种活动和节目，而且通常立刻能应对几种活动。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> ESFP型的人是现实的观察者，他们按照事物的本身去对待并接受它们。他们往往信任自己能够听到、闻到、触摸和看到的事物，而不是依赖于理论上的解释。因为他们喜欢具体的事实，对于细节有很好的记忆力，所以他们能从亲身的经历中学到最好的东西。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 消费类商业、服务业领域、广告业、娱乐业领域、旅游业、社区服务等其他领域</p>
+                        <p><strong>适合职业：</strong> 精品店、商场销售人员、娱乐、餐饮业客户经理、房地产销售人员、汽车销售人员、市场营销人员（消费类产品）等；广告企业中的设计师、创意人员、客户经理、时装设计和表演人员、摄影师、节目主持人、脱口秀演员等；旅游企业中的销售、服务人员、导游、社区工作人员、自愿工作者、公共关系专家、健身和运动教练、医护人员等。</p>
+                    `
+                },
+                ENFP: {
+                    brief: "乐观、创造力强，热爱新鲜事物",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ENFP型的人充满热情和新思想。他们乐观、自然、富有创造性和自信，具有独创性的思想和对可能性的强烈感受。对于ENFP型的人来说，生活是激动人生的戏剧。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> ENFP型的人对可能性很感兴趣，所以他们了解所有事物中的深远意义。他们具有洞察力，是热情的观察者，注意常规以外的任何事物。ENFP型的人好奇，喜欢理解而不是判断。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> ENFP型的人具有想象力、适应性和可变性，他们视灵感高于一切，常常是足智多谋的发明人。ENFP型的人不墨守成规，善于发现做事情的新方法，为思想或行为开辟新道路，并保持它们的开放。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 广告创意、广告撰稿人，市场营销和宣传策划、市场调研人员、艺术指导、公关专家、公司对外发言人等。</p>
+                        <p><strong>适合职业：</strong> 儿童教育老师、大学老师（人文类）、心理学工作者、心理辅导和咨询人员、职业规划顾问、社会工作者、人力资源专家、培训师、演讲家等；记者（访谈类）、节目策划和主持人、专栏作家、剧作家、艺术指导、设计师、卡通制作者、电影、电视制片人等。</p>
+                    `
+                },
+                ENTP: {
+                    brief: "机智、思维敏捷，喜欢挑战与辩论",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ENTP型的人喜欢兴奋与挑战。他们热情开放、足智多谋、健谈而聪明，擅长于许多事情，不断追求增加能力和个人权力。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> ENTP型的人天生富有想象力，他们深深地喜欢新思想，留心一切可能性。他们有很强的首创精神，擅于运用创造冲动。ENTP型的人视灵感高于其他的一切，力求使他们的新颖想法转变为现实。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> ENTP型的人灵活而率直，能够轻易地看出任何情况中的缺点，乐于出于兴趣争论问题的某方面。他们有极好的分析能力，是出色的策略谋划者。他们几乎一直能够为他们所希望的事情找出符合逻辑的推理。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 投资顾问、项目策划、投资银行、自我创业、市场营销、创造性领域、公共关系、政治</p>
+                        <p><strong>适合职业：</strong> 投资银行家、风险投资家、投资顾问、市场营销策划人员、广告创意总监、公关专家、企业战略顾问、企业家、创业合伙人等；律师、法律顾问、法官、仲裁员、新闻评论员、专栏作家、电视节目主持人等；各类设计师、发明家、产品经理、技术创新专家、科研项目负责人等。</p>
+                    `
+                },
+                ESTJ: {
+                    brief: "务实、果断，善于组织管理",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ESTJ型的人高效率、实际、注重结果，他们果断、有条理，天生具备领导能力。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> 他们喜欢组织和管理事务，对自己和他人都有很高的要求，重视责任和承诺，是典型的"行动派"。ESTJ型的人尊重传统和权威，相信既定的规则和制度能够带来秩序和效率，对于不符合逻辑和规范的行为缺乏耐心。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> 他们善于利用事实和经验做出决策，注重实用性和可操作性，能够快速制定计划并推动执行。在人际交往中，ESTJ型的人直接、坦诚，喜欢明确的沟通和反馈，不喜欢模糊和拖延。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 政府机构、企业管理、金融银行业、工商业领域</p>
+                        <p><strong>适合职业：</strong> 企业总经理、部门经理、项目经理、行政总监、人力资源总监、财务总监等；政府公务员、警察、军官、法官、税务官员、海关官员等；银行行长、信贷经理、保险理赔经理、财务分析师、审计师等；生产经理、运营总监、物流经理、质量控制经理等。</p>
+                    `
+                },
+                ESFJ: {
+                    brief: "热情、负责，重视人际关系和谐",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ESFJ型的人热情、友善、有责任心，他们善于与人交往，重视人际关系的和谐与稳定。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> 他们天生具有同情心和同理心，能够敏锐地感知他人的需求和情绪，乐于帮助别人解决问题，是团队中的"粘合剂"。ESFJ型的人注重传统和礼仪，尊重他人的感受和意见，喜欢在有序的环境中工作和生活。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> 他们具有强烈的责任感和奉献精神，对于自己承诺的事情会全力以赴，尤其重视家庭和朋友之间的关系。在工作中，ESFJ型的人善于组织和协调人际关系，能够营造积极融洽的团队氛围，适合从事需要沟通和服务的工作。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 服务业、教育领域、医疗卫生领域、企业行政管理</p>
+                        <p><strong>适合职业：</strong> 人力资源经理、行政主管、秘书、客服经理、公关专员、市场营销专员（侧重客户关系）等；小学教师、幼儿教师、教育顾问、培训师、校园辅导员等；护士、医生（全科/家庭医生）、营养师、心理咨询师（侧重支持性咨询）等；酒店经理、餐厅经理、零售店长、社区工作者、志愿者等。</p>
+                    `
+                },
+                ENFJ: {
+                    brief: "富有感染力，擅长引导和激励他人",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ENFJ型的人富有魅力、热情洋溢，天生具备领导才能和感染力，他们善于理解和激励他人，重视个人价值和集体目标的统一。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> ENFJ型的人具有强烈的同理心和责任感，能够敏锐地洞察他人的潜力，乐于帮助别人成长和发展，是天生的"导师"和"领导者"。他们重视人际关系的和谐，善于沟通和协调，能够快速建立信任和共识，推动团队朝着共同的目标前进。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> ENFJ型的人具有坚定的理想和信念，对于自己认为有意义的事情会全力以赴，同时也希望通过自己的努力影响他人、改变社会。在工作中，他们注重团队的凝聚力和员工的幸福感，善于创造积极向上的工作氛围。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 教育、培训、咨询领域、企业管理、公共关系、公益组织、社会工作</p>
+                        <p><strong>适合职业：</strong> 大学校长、教务主任、教师（各类教育阶段）、培训师、职业规划顾问等；企业CEO、人力资源总监、公关总监、市场营销总监、企业文化顾问等；公益组织负责人、社会工作者、心理咨询师、婚姻家庭咨询师等；政治家、外交官、新闻发言人、节目主持人（访谈/公益类）等。</p>
+                    `
+                },
+                ENTJ: {
+                    brief: "自信、果断，具备强大的领导能力",
+                    details: `
+                        <p class="mb-3"><strong>核心特质：</strong> ENTJ型的人自信、果断、有远见，是天生的领导者和战略家。</p>
+                        <p class="mb-3"><strong>工作风格：</strong> 他们具有强烈的逻辑思维和分析能力，能够快速把握问题的核心，制定清晰的计划并推动执行，追求卓越和高效。ENTJ型的人善于组织和管理团队，能够充分发挥每个人的潜力，同时对自己和他人都有很高的要求，不喜欢拖延和低效。</p>
+                        <p class="mb-3"><strong>思维方式：</strong> 他们重视知识和能力的提升，乐于接受挑战，对于新的想法和机会具有敏锐的洞察力，能够带领团队开拓新的领域。在人际交往中，ENTJ型的人直接、坦诚，喜欢基于事实和逻辑进行沟通，有时可能显得过于强势，但他们的最终目标是实现团队的成功。</p>
+                    `,
+                    career: `
+                        <p class="mb-3"><strong>适合领域：</strong> 企业管理、投资金融、战略咨询、科技领域</p>
+                        <p><strong>适合职业：</strong> 企业CEO、董事长、首席战略官、投资银行家、风险投资家等；战略咨询顾问、管理咨询师、企业并购专家、商业分析师等；科技公司创始人、产品总监、技术总监、科研项目负责人等；律师、法官、政治家、外交官、新闻评论员等。</p>
+                    `
+                }
+            };
+            
+            // 添加分享功能
+            window.shareResult = function() {
+                const resultType = document.getElementById('resultType').textContent;
+                const shareText = `我的MBTI性格类型是${resultType}！快来测试看看你的性格类型吧！`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'MBTI性格测试结果',
+                        text: shareText,
+                        url: window.location.href
+                    }).catch(err => {
+                        console.log('分享失败:', err);
+                        alert('分享功能暂不可用，请手动复制链接分享。');
+                    });
+                } else {
+                    // 复制到剪贴板
+                    const textarea = document.createElement('textarea');
+                    textarea.value = shareText + '\n' + window.location.href;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    alert('测试结果已复制到剪贴板，快去分享给朋友吧！');
+                }
+            };
+            
+            // 更新结果显示
+            document.getElementById('resultArea').style.display = 'block';
+            document.getElementById('resultType').textContent = type;
+            document.getElementById('resultDescription').textContent = detailedDescriptions[type].brief;
+            document.getElementById('detailedDescription').innerHTML = detailedDescriptions[type].details + '<h4 class="text-xl font-semibold mt-6 mb-3">适合职业：</h4>' + detailedDescriptions[type].career;
+            
+            // 更新各维度得分
+            document.getElementById('scoreE').textContent = `${percentE}%`;
+            document.getElementById('barE').style.width = `${percentE}%`;
+            document.getElementById('scoreI').textContent = `${percentI}%`;
+            document.getElementById('barI').style.width = `${percentI}%`;
+            document.getElementById('scoreS').textContent = `${percentS}%`;
+            document.getElementById('barS').style.width = `${percentS}%`;
+            document.getElementById('scoreN').textContent = `${percentN}%`;
+            document.getElementById('barN').style.width = `${percentN}%`;
+            document.getElementById('scoreT').textContent = `${percentT}%`;
+            document.getElementById('barT').style.width = `${percentT}%`;
+            document.getElementById('scoreF').textContent = `${percentF}%`;
+            document.getElementById('barF').style.width = `${percentF}%`;
+            document.getElementById('scoreJ').textContent = `${percentJ}%`;
+            document.getElementById('barJ').style.width = `${percentJ}%`;
+            document.getElementById('scoreP').textContent = `${percentP}%`;
+            document.getElementById('barP').style.width = `${percentP}%`;
+            
+            // 滚动到结果区域
+            document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
